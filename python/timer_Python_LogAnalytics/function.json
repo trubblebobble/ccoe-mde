@@ -1,0 +1,17 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "name": "mytimer",
+      "type": "timerTrigger",
+      "direction": "in",
+      "schedule": "0 */5 * * * *",
+      "runOnStartup": false
+    },
+    {
+      "name": "loganalyticsrefreshtoken",
+      "type": "durableClient",
+      "direction": "in"
+    }
+  ]
+}
