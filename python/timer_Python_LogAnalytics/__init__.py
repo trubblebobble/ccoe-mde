@@ -249,20 +249,23 @@ def get_query_filter_time_string(startTime, timer_past_due):
 
 def get_cached_query_start_time():
     # Get last query end time and add one second to it:
+    start_time_str = ''
     end_time_str = get_cached_query_end_time()
     
-    do_logging('info', 1, f'Last Saved query end time: {end_time_str}')
+    if len(end_time_str) > 0:
+        
+        do_logging('info', 1, f'Last Saved query end time: {end_time_str}')
 
-    # convert datetime string to datetime object - remove timezone suffix but include milliseconds
-    end_time_dt = datetime.datetime.strptime(end_time_str[:-1], "%Y-%m-%dT%H:%M:%S.%f")
+        # convert datetime string to datetime object - remove timezone suffix but include milliseconds
+        end_time_dt = datetime.datetime.strptime(end_time_str[:-1], "%Y-%m-%dT%H:%M:%S.%f")
 
-    # add one second to datetime object to account for having removed a second when determining the end time:
-    end_time_dt += datetime.timedelta(seconds=1)
+        # add one second to datetime object to account for having removed a second when determining the end time:
+        end_time_dt += datetime.timedelta(seconds=1)
 
-    # start time is then zero seconds past this corrected end time
-    start_time_str = datetime.datetime.strftime(end_time_dt, '%Y-%m-%dT%H:%M:00.000Z')
+        # start time is then zero seconds past this corrected end time
+        start_time_str = datetime.datetime.strftime(end_time_dt, '%Y-%m-%dT%H:%M:00.000Z')
 
-    do_logging('info', 2, f'New query start time: {start_time_str}')
+        do_logging('info', 2, f'New query start time: {start_time_str}')
 
     return start_time_str
 
@@ -270,13 +273,21 @@ def get_cached_query_start_time():
 def get_cached_query_end_time():
     # Get name of Azure Table and then get table client used to interact with it
     table_name = os.environ['FunctionConfigStorageTable']
+
+    do_logging('info', 2, f'Reading cached query end time - getting table client')
     table_client = get_table_client(table_name)
 
-    entity = table_client.get_entity(partition_key='CachedValue', row_key='QueryEndTime')
+    do_logging('info', 2, f'Reading cached query end time')
+    entities = list(table_client.list_entities())
 
-    do_logging('info', 2, f'Read cached query end time: {entity["end_time"]}')
-
-    return entity["end_time"]
+    try:
+        entity = table_client.get_entity(partition_key='CachedValue', row_key='QueryEndTime')
+        do_logging('info', 2, f'Read cached query end time: {entity["end_time"]}')
+        return entity["end_time"]
+        
+    except:
+        do_logging('info', 2, f'No cached query end time exists')
+        return ''
 
 
 def save_cached_query_end_time(end_time):
