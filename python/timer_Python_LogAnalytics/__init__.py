@@ -260,7 +260,7 @@ def get_query_filter_time_string(startTime, timer_past_due) -> str:
     do_logging('info', 2, f'Query time filter set: {query}')
 
     # for testing:
-    query = 'createdDateTime+ge+2023-07-14T01:00:00.0000000Z+and+createdDateTime+le+2023-07-14T23:00:00.0000000Z'
+    # query = 'createdDateTime+ge+2023-07-14T01:00:00.0000000Z+and+createdDateTime+le+2023-07-14T23:00:00.0000000Z'
 
     return query
 
