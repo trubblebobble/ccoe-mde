@@ -22,7 +22,7 @@ from requests.exceptions import RequestException
 # URI end points required
 identity_authority = 'https://login.microsoftonline.com'
 
-api_resource = 'https://graph.microsoft.com'
+api_resource = 'https://api.securitycenter.microsoft.com'
 
 # Logging options
 send_heartbeat = bool(os.environ['FunctionConfigSendHeartbeatToLogAnalytics'])
@@ -255,12 +255,12 @@ def get_query_filter_time_string(startTime, timer_past_due) -> str:
     global query_end_time_str
     query_end_time_str = datetime.datetime.strftime(query_end_time, '%Y-%m-%dT%H:%M:%S.999Z')
 
-    query = f'createdDateTime+ge+{query_start_time_str}+and+createdDateTime+le+{query_end_time_str}'
+    query = f'alertCreationTime+ge+{query_start_time_str}+and+alertCreationTime+le+{query_end_time_str}'
 
     do_logging('info', 2, f'Query time filter set: {query}')
 
     # for testing:
-    # query = 'createdDateTime+ge+2023-07-14T01:00:00.0000000Z+and+createdDateTime+le+2023-07-14T23:00:00.0000000Z'
+    # query = 'alertCreationTime+ge+2023-07-14T01:00:00.0000000Z+and+alertCreationTime+le+2023-07-14T23:00:00.0000000Z'
 
     return query
 
@@ -484,7 +484,7 @@ def do_get_new_alerts(access_token, query) -> dict:
         "Content-Type": "application/json"
     }
     # Set up api endpoint to get alerts from, and add filter query
-    api_resource_alerts_endpoint = f'{api_resource}/v1.0/security/alerts_V2'
+    api_resource_alerts_endpoint = f'{api_resource}/api/alerts'
     alertsURI = f'{api_resource_alerts_endpoint}?{query}'
 
     do_logging('info', 1, f'alertsURI: {alertsURI}')
@@ -531,7 +531,7 @@ def create_heartbeat(message):
     heartbeatTime = str(datetime.datetime.utcnow()).replace(' ', 'T')
     log_analytics_table = 'Heartbeat'
 
-    api_resource_schema = f'{api_resource}/v1.0/$metadata#security/alerts_v2'
+    api_resource_schema = f'{api_resource}/api/$metadata#Alerts'
 
     try:
         jsonDict = {
