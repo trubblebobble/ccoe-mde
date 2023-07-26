@@ -22,7 +22,7 @@ $FunctionConfigEventHubName = "<Add Event Hub name or leave blank>" # Add Event 
 $FunctionConfigEventHubAccessKeyName = "<Access Key name or leave blank>" # Add Event Hub Access Key Name - can be namespace root or hub-specific
 
 # Remaining variables can be left as default unless there are specific reasons to change them
-$randomIdentifier = Get-Random -Maximum 9999
+$randomIdentifier = Get-Random -Maximum 99999999
 $location = "uksouth"
 $functionAppResourceGroup = "azure-functions-rg-$randomIdentifier"
 $tag = @{application = "function-app-consumption-python" }
@@ -134,17 +134,17 @@ if (Get-AzResourceGroup -Name $LogAnalyticsResourceGroupName -ErrorAction Silent
         $FunctionConfigLogAnalyticsKeyValue = "$($(Get-AzOperationalInsightsWorkspaceSharedKeys -ResourceGroupName $LogAnalyticsResourceGroupName -Name $LogAnalyticsWorkspaceName).PrimarySharedKey)"# Log Analytics Primary key
         $FunctionConfigLogAnalyticsWorkspaceId = "$($(Get-AzOperationalInsightsWorkspace -ResourceGroupName $LogAnalyticsResourceGroupName -Name $LogAnalyticsWorkspaceName).CustomerId)" # LAW ID to ingest the alerts
 
-    # Check workspace details were read successfully
+        # Check workspace details were read successfully
         if ($FunctionConfigLogAnalyticsKeyValue.length -eq 0) {
-        Write-Error "The Log Analytics Workspace Key could not be read"
-        exit 1
-    }
+            Write-Error "The Log Analytics Workspace Key could not be read"
+            exit 1
+        }
     
-    if ($FunctionConfigLogAnalyticsWorkspaceId.length -eq 0) {
-        Write-Error "The Log Analytics Workspace ID could not be read"
-        exit 1
+        if ($FunctionConfigLogAnalyticsWorkspaceId.length -eq 0) {
+            Write-Error "The Log Analytics Workspace ID could not be read"
+            exit 1
+        }
     }
-}
 
     # If an Event Hub name has been specified, look up the access key for it:
     if ($FunctionConfigEventHubName.Length -gt 0 -and $FunctionConfigAlertTargetType -eq "EventHub") {
@@ -270,23 +270,23 @@ catch {
 # Add application settings to the function app
 $appSettings = @{
     "FunctionConfigSendHeartbeatToLogAnalytics" = "$FunctionConfigSendHeartbeatToLogAnalytics"
-    "FunctionConfigUse_last_saved_time"     = "$FunctionConfigUse_last_saved_time"
+    "FunctionConfigUse_last_saved_time"         = "$FunctionConfigUse_last_saved_time"
     "FunctionConfigAlertTargetType"             = "$FunctionConfigAlertTargetType"
     "FunctionConfigLogAnalyticsKeyValue"        = "$FunctionConfigLogAnalyticsKeyValue"
-    "FunctionConfigLogAnalyticsWorkspaceId" = "$FunctionConfigLogAnalyticsWorkspaceId"
-    "FunctionConfigLogAnalyticsTableName"   = "$FunctionConfigLogAnalyticsTableName"
+    "FunctionConfigLogAnalyticsWorkspaceId"     = "$FunctionConfigLogAnalyticsWorkspaceId"
+    "FunctionConfigLogAnalyticsTableName"       = "$FunctionConfigLogAnalyticsTableName"
     "FunctionConfigEventHubNamespace"           = "$FunctionConfigEventHubNamespace"
     "FunctionConfigEventHubName"                = "$FunctionConfigEventHubName"
     "FunctionConfigEventHubAccessKeyName"       = "$FunctionConfigEventHubAccessKeyName"
     "FunctionConfigEventHubAccessKeyValue"      = "$FunctionConfigEventHubAccessKeyValue"
     "FunctionConfigEventHubAccessKeyType"       = "$FunctionConfigEventHubAccessKeyType"
-    "FunctionConfigMDETenantId"             = "$FunctionConfigMDETenantId"
-    "FunctionConfigMDEClientAppId"          = "$FunctionConfigMDEClientAppId"
-    "FunctionConfigStorageTable"            = "$FunctionConfigStorageTable"
-    "FunctionConfigStorageContainer"        = "$FunctionConfigStorageContainer"
-    "FunctionConfigQueryDepth"                  = "2"
-    "FunctionConfigLoggingType"             = "logging"
-    "FunctionConfigLoggingLevel"            = "$FunctionConfigLoggingLevel"
+    "FunctionConfigMDETenantId"                 = "$FunctionConfigMDETenantId"
+    "FunctionConfigMDEClientAppId"              = "$FunctionConfigMDEClientAppId"
+    "FunctionConfigStorageTable"                = "$FunctionConfigStorageTable"
+    "FunctionConfigStorageContainer"            = "$FunctionConfigStorageContainer"
+    "FunctionConfigQueryDepth"                  = "5"
+    "FunctionConfigLoggingType"                 = "logging"
+    "FunctionConfigLoggingLevel"                = "$FunctionConfigLoggingLevel"
 }
 
 try {
