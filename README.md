@@ -19,8 +19,10 @@ This results in a fairly simple architectural model being required and has the a
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [High Level Design](#high-level-design)
+- [Azure Function App Proof of Concept](#azure-function-app-proof-of-concept)
+  - [Overview of Solution](#overview-of-solution)
+  - [Table of Contents](#table-of-contents)
+  - [High Level Design](#high-level-design)
   - [Identity Tenant Resources](#identity-tenant-resources)
   - [Trust Tenant](#trust-tenant)
     - [Storage Account Table](#storage-account-table)
@@ -29,15 +31,16 @@ This results in a fairly simple architectural model being required and has the a
     - [App Settings](#app-settings)
     - [Log Analytics Workspace](#log-analytics-workspace)
     - [Event Hub](#event-hub)
-- [Deployment Guidelines](#deployment-guidelines)
-  - [Prerequisites](#prerequisites)
-  - [Deploy Code](#deploy-code)
-  - [Installation Steps](#installation-steps)
-- [Azure Function App Authentication](#azure-function-app-authentication)
-- [Deployment Checklist](#deployment-checklist)
-- [Future Roadmap](#future-roadmap)
-- [Glossary of Terms](#glossary-of-terms)
-- [Resources](#resources)
+  - [Deployment Guidelines](#deployment-guidelines)
+    - [Prerequisites](#prerequisites)
+    - [Deploy Code](#deploy-code)
+    - [Installation Steps](#installation-steps)
+  - [Azure Function App Authentication](#azure-function-app-authentication)
+  - [Streaming to Event Hub](#streaming-to-event-hub)
+  - [Deployment Checklist](#deployment-checklist)
+  - [Future Roadmap](#future-roadmap)
+  - [Glossary of Terms](#glossary-of-terms)
+  - [Resources](#resources)
 
 ## High Level Design
 
@@ -45,7 +48,7 @@ The solution is designed to export MDE Alerts from one tenant and push them to a
 
 ![Solution Diagram](./images/Diagram.png)
 
-### Identity Tenant Resources
+## Identity Tenant Resources
 
 On the assumption that the Identity Tenant already exists and that MDE is deployed into it with devices grouped by appropriate end-user Device Groups, very minimal change is required in the tenant to deploy this solution.
 In fact, the only resource required is an App Registration service principal with relevant API permissions assigned to it:
