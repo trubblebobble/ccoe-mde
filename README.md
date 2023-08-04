@@ -2,11 +2,20 @@
 
 ## Overview of Solution
 
-CCoE was asked to provide a solution that could be run in an Azure Function App to call the MDE Graph APIs to extract alert data from the central tenant, while meeting the data scoping requirement via an App Registration service principal with (user) Delegated Permissions.
+A centralised identity management team within NHSE CSOC is responsible for managing the Active Directory that devices and users across many distributed NHS organisations (e.g., Trusts) authenticate users and register end-user devices against.
+
+Microsoft Defender for Endpoint (MDE) is enabled within the synchronised Azure Active Directory (AAD) tenant to detect security events originating within these devices.
+
+The CSOC team is providing here a solution that runs in an Azure Function App to call the Microsoft ATP APIs to extract alert data from the central tenant on a per-trust basis so that the alerts can be imported into local security tooling of each trust.
+
+The devices are segregated by organisation within MDE by the use of Device Groups, and a core tenet of the final solution is that the extracts are scoped to just the alerts from devices in a specific group (i.e., the devices managed by the organisation querying the data), with no risk of data from the other organisations also being accessible.
+
+This is achieved by use of a service principal that is granted access to the MDE APIs in the central tenant, and which is then used to authenticate the API calls made by the Function App via user delegated permissions.
 
 With this access model, the service principal provides initial authorisation to access the APIs, but RBAC level control over data access is determined by the credentials of the user who actually authenticates the OAuth credential flow used by the API calls.
 
 This results in a fairly simple architectural model being required and has the additional advantage that the majority of the resources involved are owned and managed by the external organisation, reducing the management and cost burden on the CSOC team.
+
 
 ## Table of Contents
 
@@ -29,16 +38,6 @@ This results in a fairly simple architectural model being required and has the a
 - [Future Roadmap](#future-roadmap)
 - [Glossary of Terms](#glossary-of-terms)
 - [Resources](#resources)
-
-## Introduction
-
-A centralised identity management team within NHSE CSOC is responsible for managing the Active Directory that devices across many distributed NHS organisations (e.g., Trusts) use to authenticate users and register end-user devices against.
-
-Microsoft Defender for Endpoint (MDE) is enabled within the synchronised Azure Active Directory (AAD) tenant to detect security events originating within these devices.
-
-The CCoE was asked to assist the security team in creating a process to allow the distributed organisations to extract Microsoft Defender for Endpoint Alerts from the central Identity Tenant into their own SIEM tooling.
-
-The devices are segregated by organisation within MDE by the use of Device Groups, and a core tenant of the final solution was that the extracts MUST be scoped to just the alerts from devices in a specific group (i.e., the devices managed by the organisation querying the data), with no risk of data from the other organisations also being accessible.
 
 ## High Level Design
 
@@ -87,7 +86,7 @@ A number of App Settings are used in the function app to store run-time variable
 
 Used to store the alerts extracted from MDE, unless an Event Hub is specified instead. Also used to capture Heartbeat messages from the function app, unless this option is turned off in the [App Settings](#app-settings).
 
-This Workspace must be created in advance of running the deployment and can be a pre-existing workspace.
+***This Workspace must be created in advance of running the deployment and can be a pre-existing workspace.***
 
 ### Event Hub
 
@@ -140,7 +139,7 @@ The following variables relating to the Identity and Trust tenant environments n
 
 ### Installation Steps
 
-1. While the installation can be carried out from a PowerShell session in a local workstation, it is recommended to use Azure Cloud Shell, which is available from the Azure Portal. This provides a Linux-based environment with all the tools required to run the installation script and avoids security issues that can occur when running locally.
+1. While the installation can be carried out from a PowerShell session in a local workstation, it is highly recommended to use Azure Cloud Shell, which is available from the Azure Portal. This provides a Linux-based environment with all the tools required to run the installation script and avoids security issues that can occur when running locally.
 
 2. To access the cloud shell, click on the icon in the top-right corner of the Azure Portal and then select **PowerShell**:
 
@@ -292,7 +291,9 @@ Once the Function App is deployed and running, it is possible to monitor the dat
 
 - Use Managed Identity to access Storage Account.
 
-- Add alternative Alert output formats and locations (e.g. Storage Account, Event Hub, AWS S3 bucket etc).
+- Add alternative Alert output formats and locations (e.g. Storage Account, AWS S3 bucket etc).
+
+- Migrate APIs from Microsoft ATP to Graph Security API (an alternative version of the function app is available in an earlier commit, but cannot be deployed until Graph authentication methods are approved higher up in the NHS).
 
 ## Glossary of Terms
 
