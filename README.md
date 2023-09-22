@@ -105,6 +105,8 @@ Used optionally to stream the Alerts to instead of sending them to a Log Analyti
 
 2. Azure User with Owner or Contributor right to the subscription that the Function App will be deployed into.
 
+3. Active Directory User that has the required RBAC permissions in the MDE environment to access alert data for your organisation.
+
 ### Deploy Code
 
 The deployment can be built using a PowerShell script available in this repo.
