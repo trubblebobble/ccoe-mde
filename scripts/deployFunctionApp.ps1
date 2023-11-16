@@ -207,6 +207,7 @@ try {
         -Location $location `
         -ResourceGroupName $functionAppResourceGroup `
         -SkuName $skuStorage `
+        -EnableHttpsTrafficOnly $true `
         -Tag $tag
     Write-Output "Storage account $storage was created successfully."
 }
