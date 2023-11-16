@@ -38,9 +38,10 @@ This results in a fairly simple architectural model being required and has the a
   - [Azure Function App Authentication](#azure-function-app-authentication)
   - [Streaming to Event Hub](#streaming-to-event-hub)
   - [Deployment Checklist](#deployment-checklist)
+  - [Generate Sample Security Alerts](https://github.com/josielsouzanordcloud/ccoe-mde/blob/main/Generate_sample_alerts.md)
   - [Future Roadmap](#future-roadmap)
-  - [Glossary of Terms](#glossary-of-terms)
-  - [Resources](#resources)
+  - [Glossary of Terms](#glossary-of-terms) 
+  - [Resources](#resources) 
 
 ## High Level Design
 
@@ -324,4 +325,3 @@ Once the Function App is deployed and running, it is possible to monitor the dat
 - [Azure Durable Functions Overview](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview?tabs=csharp-inproc)
 - [Microsoft Authentication Library (MSAL) Overview](https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-overview)
 - [Microsoft Authentication Library (MSAL) for Desktop Apps with Device Code Flow](https://learn.microsoft.com/en-us/azure/active-directory/develop/scenario-desktop-acquire-token-device-code-flow?tabs=python)
-- [Generate Sample Security Alerts](https://github.com/josielsouzanordcloud/ccoe-mde/blob/main/Generate_sample_alerts.md)
