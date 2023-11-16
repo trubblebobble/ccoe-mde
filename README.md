@@ -38,9 +38,10 @@ This results in a fairly simple architectural model being required and has the a
   - [Azure Function App Authentication](#azure-function-app-authentication)
   - [Streaming to Event Hub](#streaming-to-event-hub)
   - [Deployment Checklist](#deployment-checklist)
+  - [Generate Sample Security Alerts](https://github.com/josielsouzanordcloud/ccoe-mde/blob/main/Generate_sample_alerts.md)
   - [Future Roadmap](#future-roadmap)
-  - [Glossary of Terms](#glossary-of-terms)
-  - [Resources](#resources)
+  - [Glossary of Terms](#glossary-of-terms) 
+  - [Resources](#resources) 
 
 ## High Level Design
 
