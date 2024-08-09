@@ -53,7 +53,8 @@ async def main(mytimer: func.TimerRequest, loganalyticsrefreshtoken: str) -> Non
         query = f'$filter={query}'
 
     # Get the access token from the durable entity
-    access_token = await get_access_token(loganalyticsrefreshtoken)
+    # access_token = await get_access_token(loganalyticsrefreshtoken)
+    access_token = msal_initial_token
 
     # Exit function if access token is not present
     if access_token is None:

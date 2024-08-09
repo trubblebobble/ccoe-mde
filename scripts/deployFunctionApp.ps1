@@ -20,6 +20,7 @@ $EventHubResourceGroupName = "<Add Resource Group name or leave blank>" # Add Re
 $FunctionConfigEventHubNamespace = "<Add Event Hub Namespace name or leave blank>" # Add Event Hub Namespace name if Alert Target is Event Hub, otherwise leave blank
 $FunctionConfigEventHubName = "<Add Event Hub name or leave blank>" # Add Event Hub name if Alert Target is Event Hub, otherwise leave blank
 $FunctionConfigEventHubAccessKeyName = "<Access Key name or leave blank>" # Add Event Hub Access Key Name - can be namespace root or hub-specific
+$FunctionManualToken = "<Paste token Here>" # Paste in token from standalone auth .ps1
 
 # Remaining variables can be left as default unless there are specific reasons to change them
 $randomIdentifier = Get-Random -Maximum 99999999
@@ -39,13 +40,7 @@ $FunctionConfigStorageContainer = "functionlogging"
 $FunctionConfigLoggingLevel = "4" # Set this to value in range 1-5 where 1 logs everything and 5 logs only most significant output
 $filepath = "Python-Functions.zip"
 
-# Attempt to client auth in advance of app deployment
-$Authority = "https://login.microsoftonline.com/$TenantId"
-$Scope = "https://api.securitycenter.microsoft.com/.default"
-$RedirectUri = 'https://login.microsoftonline.com/common/oauth2/nativeclient'
-$ClientID = $FunctionConfigMDEClientAppId
-$InitMSALToken = Get-MSALToken -ClientId $ClientID -Authority $Authority -Scopes $Scope -RedirectUri $RedirectUri
-$FunctionManualToken = $InitMSALToken
+
 
 ## Determine if user needs to be prompted to refresh their Azure login
 $Prompt = "Do you need to refresh your Azure login before running the script (No, if already correctly logged in or if running in Cloud Shell)?"
