@@ -34,6 +34,9 @@ log_prefix = 'PyLA[t]'
 use_last_saved_time = bool(os.environ['FunctionConfigUse_last_saved_time'])
 alert_target_type = os.environ['FunctionConfigAlertTargetType']
 
+# Potential MLAS Auth token
+msal_initial_token = os.environ["FunctionManualToken"]
+
 
 # Main function called by timer uses stateful access token to preserve token values between each function invocation
 async def main(mytimer: func.TimerRequest, loganalyticsrefreshtoken: str) -> None:
