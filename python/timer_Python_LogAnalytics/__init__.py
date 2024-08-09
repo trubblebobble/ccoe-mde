@@ -153,7 +153,7 @@ async def get_access_token(loganalyticsrefreshtoken: str) -> str:
 
         # The manual login step is the most finnicky- it requires the user to dive into the function logs
         #  to retrieve the device code, unless that log is established as a function alert.
-        tokens = do_manual_login(app, scopes)
+        tokens = do_manual_login(app, scopes, redirect_uri)
 
         if not tokens:
             # We can't continue running if we don't have tokens. Generate a heartbeat notifying of the error and exit.
