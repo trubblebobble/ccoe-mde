@@ -24,6 +24,8 @@ identity_authority = 'https://login.microsoftonline.com'
 
 api_resource = 'https://api.securitycenter.microsoft.com'
 
+redirect_uri = 'https://login.microsoftonline.com/common/oauth2/nativeclient'
+
 # Logging options
 send_heartbeat = bool(os.environ['FunctionConfigSendHeartbeatToLogAnalytics'])
 
@@ -178,8 +180,31 @@ async def get_access_token(loganalyticsrefreshtoken: str) -> str:
 
     return access_token
 
+def do_manual_login(app, scopes, redirect_uri) -> dict:
+    do_logging('info', 3, 'Interactive Logon started.')
 
-def do_manual_login(app, scopes) -> dict:
+    # MSAL - Get the authorization request URL
+    auth_url = app.get_authorization_request_url(scopes, redirect_uri=redirect_uri)
+
+    do_logging('info', 5, f"Please visit this URL to log in: {auth_url}")
+
+    # You should have a way to receive the authorization code, such as setting up a web server
+    auth_code = input('Enter the authorization code provided by the user: ')
+
+    try:
+        # MSAL - Exchange the authorization code for tokens
+        tokens = app.acquire_token_by_authorization_code(auth_code, scopes=scopes, redirect_uri=redirect_uri)
+        do_logging('info', 3, f'Interactive logon complete. Initial access token and refresh token acquired. Tokens: {str(tokens)}')
+
+    except Exception as e:
+        do_logging('exception', 5, f'Error Authenticating: {str(e)}')
+        tokens = {}
+
+    return tokens
+
+
+
+def do_manual_login_old(app, scopes) -> dict:
 
     do_logging('info', 3, 'Interactive Logon started.')
 
